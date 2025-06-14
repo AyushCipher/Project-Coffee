@@ -12,7 +12,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
 
   const handleDownloadCatalogue = () => {
     const link = document.createElement('a');
-    link.href = '/catalogue.pdf'; 
+    link.href = '/catalogue.pdf';
     link.download = 'Purple-Bean-Agro-Catalogue.pdf';
     document.body.appendChild(link);
     link.click();
@@ -45,7 +45,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+            {/* Header Image */}
             <div className="relative">
               <button
                 onClick={onClose}
@@ -69,7 +69,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Content */}
+            {/* Modal Content */}
             <div className="p-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Column */}
@@ -96,15 +96,20 @@ const ProductModal = ({ product, isOpen, onClose }) => {
 
                   {product.detailedDescription && (
                     <div className="mb-6">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">Product Details</h3>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                        Product Details
+                      </h3>
                       <p className="text-gray-600 leading-relaxed">
                         {product.detailedDescription}
                       </p>
                     </div>
                   )}
 
+                  {/* Key Features */}
                   <div className="mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Key Features</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      Key Features
+                    </h3>
                     <div className="space-y-3">
                       {product.features.map((feature, index) => (
                         <motion.div
@@ -135,7 +140,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                         onClick={handleScheduleCall}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full bg-primary-600 text-white py-3 rounded-full font-semibold hover:bg-primary-700 transition-colors duration-200 flex items-center justify-center space-x-2"
+                        className="w-full bg-primary-600 text-white py-3 rounded-full font-semibold hover:bg-primary-700 transition-colors duration-100 flex items-center justify-center space-x-2"
                       >
                         <ShoppingCart className="h-5 w-5" />
                         <span>Request Quote</span>
@@ -145,7 +150,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                         onClick={handleDownloadCatalogue}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full border-2 border-primary-600 text-primary-600 py-3 rounded-full font-semibold hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2"
+                        className="w-full border-2 border-primary-600 text-primary-600 py-3 rounded-full font-semibold hover:bg-primary-50 transition-colors duration-100 flex items-center justify-center space-x-2"
                       >
                         <Download className="h-5 w-5" />
                         <span>Download Specs</span>
@@ -153,20 +158,41 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                     </div>
                   </div>
 
+                  {/* Specifications */}
                   {product.specifications && (
                     <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-4">Specifications</h3>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        Specifications
+                      </h3>
                       <div className="space-y-3">
                         {Object.entries(product.specifications).map(([key, value]) => (
                           <div
                             key={key}
-                            className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0"
+                            className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2 border-b border-gray-100 last:border-b-0"
                           >
-                            <span className="text-gray-600 font-medium">{key}:</span>
-                            <span className="text-gray-900">{value}</span>
+                            <span className="text-gray-600 font-medium mb-1 sm:mb-0 sm:min-w-[120px]">
+                              {key}:
+                            </span>
+
+                            {/* Special handling for Variant field */}
+                            {key.toLowerCase() === 'variant' && typeof value === 'string' ? (
+                              <div className="flex flex-wrap gap-2 justify-start sm:justify-end">
+                                {value.split(',').map((variant, i) => (
+                                  <span
+                                    key={i}
+                                    className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-medium"
+                                  >
+                                    {variant.trim()}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-gray-900 text-right">{value}</span>
+                            )}
                           </div>
                         ))}
                       </div>
+
                     </div>
                   )}
                 </div>

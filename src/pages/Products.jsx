@@ -13,51 +13,69 @@ const Products = ({ searchTerm = '' }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-    const matchesSubcategory = !selectedSubcategory || product.subcategory === selectedSubcategory;
-    const matchesSubSubcategory = !selectedSubSubcategory || product.subSubcategory === selectedSubSubcategory;
-    const matchesSearch = !searchTerm || 
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (product.subcategory && product.subcategory.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesCategory && matchesSubcategory && matchesSubSubcategory && matchesSearch;
-  });
+  const filteredProducts = products.filter((product) => {
+  const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+
+  let matchesSubcategory = true;
+  let matchesSubSubcategory = true;
+
+  const selectedStructure = categoryStructure[selectedCategory];
+
+  if (selectedSubcategory) {
+  if (
+    typeof selectedStructure === 'object' &&
+    !Array.isArray(selectedStructure)
+  ) {
+    matchesSubcategory = product.subcategory === selectedSubcategory;
+  } else if (Array.isArray(selectedStructure)) {
+    // For categories like 'Plain Coffee' or 'Crystal Coffee'
+    matchesSubcategory = product.subcategory === selectedSubcategory;
+  }
+}
+
+
+  if (
+    selectedSubSubcategory &&
+    selectedStructure &&
+    typeof selectedStructure[selectedSubcategory] === 'object' &&
+    Array.isArray(selectedStructure[selectedSubcategory])
+  ) {
+    matchesSubSubcategory = product.subSubcategory === selectedSubSubcategory;
+  }
+
+  const matchesSearch =
+    !searchTerm ||
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (product.subcategory &&
+      product.subcategory.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  return (
+    matchesCategory &&
+    matchesSubcategory &&
+    matchesSubSubcategory &&
+    matchesSearch
+  );
+});
+
+
 
   const handleCategoryClick = (category) => {
     const subcategories = categoryStructure[category];
-    
+
     if (Array.isArray(subcategories) && subcategories.length > 0) {
-      // Simple array of subcategories
-      if (expandedCategory === category) {
-        setExpandedCategory('');
-        setSelectedCategory('All');
-        setSelectedSubcategory('');
-        setSelectedSubSubcategory('');
-      } else {
-        setExpandedCategory(category);
-        setSelectedCategory(category);
-        setSelectedSubcategory('');
-        setSelectedSubSubcategory('');
-      }
+      setExpandedCategory(expandedCategory === category ? '' : category);
+      setSelectedCategory(category);
+      setSelectedSubcategory('');
+      setSelectedSubSubcategory('');
     } else if (typeof subcategories === 'object' && Object.keys(subcategories).length > 0) {
-      // Nested object with sub-subcategories
-      if (expandedCategory === category) {
-        setExpandedCategory('');
-        setSelectedCategory('All');
-        setSelectedSubcategory('');
-        setSelectedSubSubcategory('');
-        setExpandedSubcategory('');
-      } else {
-        setExpandedCategory(category);
-        setSelectedCategory(category);
-        setSelectedSubcategory('');
-        setSelectedSubSubcategory('');
-        setExpandedSubcategory('');
-      }
+      setExpandedCategory(expandedCategory === category ? '' : category);
+      setSelectedCategory(category);
+      setSelectedSubcategory('');
+      setSelectedSubSubcategory('');
+      setExpandedSubcategory('');
     } else {
-      // No subcategories, select the category directly
       setSelectedCategory(category);
       setSelectedSubcategory('');
       setSelectedSubSubcategory('');
@@ -68,17 +86,11 @@ const Products = ({ searchTerm = '' }) => {
 
   const handleSubcategoryClick = (subcategory) => {
     const subSubcategories = categoryStructure[selectedCategory][subcategory];
-    
+
     if (Array.isArray(subSubcategories) && subSubcategories.length > 0) {
-      if (expandedSubcategory === subcategory) {
-        setExpandedSubcategory('');
-        setSelectedSubcategory('');
-        setSelectedSubSubcategory('');
-      } else {
-        setExpandedSubcategory(subcategory);
-        setSelectedSubcategory(subcategory);
-        setSelectedSubSubcategory('');
-      }
+      setExpandedSubcategory(expandedSubcategory === subcategory ? '' : subcategory);
+      setSelectedSubcategory(subcategory);
+      setSelectedSubSubcategory('');
     } else {
       setSelectedSubcategory(subcategory);
       setSelectedSubSubcategory('');
@@ -105,17 +117,11 @@ const Products = ({ searchTerm = '' }) => {
     const body = encodeURIComponent(
       'Hello,\n\nI would like to schedule a call to discuss your coffee products and services.\n\nBest regards,'
     );
-    const mailtoLink = `mailto:purplebeanagro@gmail.com?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
+    window.location.href = `mailto:purplebeanagro@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="pt-16"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pt-16">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 to-primary-800 py-20 mt-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -156,7 +162,7 @@ const Products = ({ searchTerm = '' }) => {
                     setExpandedCategory('');
                     setExpandedSubcategory('');
                   }}
-                  className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
+                  className={`px-6 py-2 rounded-full font-medium transition-all duration-100 ${
                     selectedCategory === 'All'
                       ? 'bg-primary-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -354,14 +360,14 @@ const Products = ({ searchTerm = '' }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-100 overflow-hidden cursor-pointer"
                 onClick={() => handleProductClick(product)}
               >
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-100"
                   />
                   {product.isNew && (
                     <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
@@ -411,7 +417,7 @@ const Products = ({ searchTerm = '' }) => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-primary-600 text-white px-6 py-2 rounded-full font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center space-x-2"
+                      className="bg-primary-600 text-white px-6 py-2 rounded-full font-medium hover:bg-primary-700 transition-colors duration-100 flex items-center space-x-2"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleProductClick(product);
@@ -463,9 +469,9 @@ const Products = ({ searchTerm = '' }) => {
               onClick={handleScheduleCall}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-primary-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-700 transition-colors duration-200"
+              className="bg-primary-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-700 transition-colors duration-100"
             >
-              Request Custom Quote
+              Request Custom Order
             </motion.button>
           </motion.div>
         </div>

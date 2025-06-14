@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import logo from '../assets/logo.png';
-import { Menu, X, Leaf, Search } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
+import { filterItems, products } from '../data.js';
 
 const Navbar = ({ onSearch, searchTerm }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '');
+  const [searchResults, setSearchResults] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,6 +25,12 @@ const Navbar = ({ onSearch, searchTerm }) => {
     setLocalSearchTerm(searchTerm || '');
   }, [searchTerm]);
 
+  // Update search results when local search term changes
+  useEffect(() => {
+    const results = filterItems(products, localSearchTerm);
+    setSearchResults(results);
+  }, [localSearchTerm]);
+
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
@@ -33,12 +41,16 @@ const Navbar = ({ onSearch, searchTerm }) => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setLocalSearchTerm(value);
-    
+
+    // Filter products using the filterItems function
+    const results = filterItems(products, value);
+    setSearchResults(results);
+
     if (onSearch) {
       onSearch(value);
     }
-    
-    // Navigate to products page if not already there and search term exists
+
+    // Navigate to products page if there's a search term and not already on products page
     if (value && location.pathname !== '/products') {
       navigate('/products');
     }
@@ -60,7 +72,7 @@ const Navbar = ({ onSearch, searchTerm }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-3">
-        <div className="flex justify-between items-center h-16 ">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <motion.div
@@ -78,7 +90,6 @@ const Navbar = ({ onSearch, searchTerm }) => {
               Purple Bean Agro
             </span>
           </Link>
-
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -101,7 +112,7 @@ const Navbar = ({ onSearch, searchTerm }) => {
                 )}
               </Link>
             ))}
-            
+
             {/* Search Bar - Always visible */}
             <div className="relative mb-4">
               <form onSubmit={handleSearchSubmit}>
@@ -153,7 +164,7 @@ const Navbar = ({ onSearch, searchTerm }) => {
               {item.name}
             </Link>
           ))}
-          
+
           {/* Mobile Search Bar */}
           <div className="pt-4">
             <form onSubmit={handleSearchSubmit}>

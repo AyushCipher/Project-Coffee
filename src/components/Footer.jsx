@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 import { Leaf, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Footer = () => {
@@ -25,7 +26,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -36,9 +37,13 @@ const Footer = () => {
             className="space-y-4"
           >
             <div className="flex items-center space-x-2">
-              <div className="bg-primary-600 p-2 rounded-full">
-                <Leaf className="h-6 w-6 text-white" />
-              </div>
+              
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              
               <span className="font-bold text-xl">Purple Bean Agro</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -67,7 +72,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="space-y-4"
+            className="space-y-4 lg:px-16"
           >
             <h3 className="font-semibold text-lg">Quick Links</h3>
             <ul className="space-y-2">
@@ -83,6 +88,7 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
+
 
           {/* Products */}
           <motion.div

@@ -37,18 +37,18 @@ const Home = () => {
     {
       name: 'Plain Coffee',
       description: 'High-quality instant coffee in various processing methods',
-      image: 'https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg',
+      image: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg',
     },
     {
       name: 'Coffee Premix',
       description: 'Ready-to-use coffee premixes for commercial applications',
-      image: 'https://images.pexels.com/photos/4021769/pexels-photo-4021769.jpeg',
+      image: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg',
     },
   ];
 
   const stats = [
     { number: '50+', label: 'Global Clients' },
-    { number: '500+', label: 'Products' },
+    { number: '250+', label: 'Products' },
     { number: '20+', label: 'Countries' },
     { number: '15+', label: 'Years Experience' },
   ];
@@ -102,28 +102,30 @@ const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center sm:items-start"
           >
             <Link to="/products">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white text-primary-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center space-x-2"
+                className="bg-white text-primary-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-100 flex items-center justify-center space-x-2"
               >
                 <span>Explore Products</span>
                 <ArrowRight className="h-5 w-5" />
               </motion.button>
             </Link>
+
             <Link to="/contact">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-primary-700 transition-all duration-200"
               >
-                Get Quote
+                Get Contact
               </motion.button>
             </Link>
           </motion.div>
+
         </div>
         
         <motion.div
@@ -237,7 +239,7 @@ const Home = () => {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-100"
                   />
                 </div>
                 <div className="p-6">
@@ -251,7 +253,7 @@ const Home = () => {
                     onClick={handleLearnMoreClick}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="text-primary-600 font-semibold hover:text-primary-700 transition-colors duration-200 flex items-center space-x-2"
+                    className="text-primary-600 font-semibold hover:text-primary-700 transition-colors duration-100 flex items-center space-x-2"
                   >
                     <span>Learn More</span>
                     <ArrowRight className="h-4 w-4" />
@@ -271,7 +273,7 @@ const Home = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-primary-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-700 transition-colors duration-200"
+                className="bg-primary-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-700 transition-colors duration-100"
               >
                 View All Products
               </motion.button>
@@ -299,7 +301,7 @@ const Home = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white text-primary-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200 inline-flex items-center space-x-2"
+                className="bg-white text-primary-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-100 inline-flex items-center space-x-2"
               >
                 <span>Start Partnership</span>
                 <ArrowRight className="h-5 w-5" />

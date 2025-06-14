@@ -150,7 +150,7 @@ This message was sent from the Purple Bean Agro contact form.`
 
   const offices = [
     {
-      city: 'Mumbai',
+      city: 'Pune',
       address: ['PBAI Pvt. Ltd, Factory No. 12/4,', ' Near Dapodi Metro Station,', ' Pune, Maharashtra 411012.'],
       phone: '+91-8101287339',
       email: 'Purplebeanagro@gmail.com',
@@ -300,7 +300,7 @@ This message was sent from the Purple Bean Agro contact form.`
                 whileTap={{ scale: 0.95 }}
                 className="bg-white text-primary-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200"
               >
-                Schedule a Call
+                Schedule Email
               </motion.button>
               <motion.button
                 onClick={handleDownloadCatalogue}
